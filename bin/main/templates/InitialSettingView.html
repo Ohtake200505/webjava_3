@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>InitialSettings</title>
+</head>
+<body>
+<div th:if="${num} != 0">
+	<h1>キャラ選択(最大4人)</h1>
+	<div>
+		<p>登録済みメンバー</p>
+		<table border="1">
+			<thead>
+				<tr>
+				<th>ＩＤ</th>
+				<th>名前</th>
+				<th>職業</th>
+				<th>ﾚﾍﾞﾙ</th>
+				<th>ＨＰ</th>
+				<th>選択</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="player : ${playerList}">
+				<td th:text="${player.charId}"></td>
+				<td th:text="${player.name}"></td>
+				<td th:text="${player.jobName}"></td>
+				<td th:text="${player.level}"></td>
+				<td th:text="${player.hp}"></td>
+				<td>
+				<div th:if="${player.memberId} == 99">
+					<form action="#" th:action="@{/Rpg}" th:object="${PlayerForm}" method="POST">
+					<input type="hidden" name="charId" th:value="${player.charId}">
+					<input type="hidden" name="jobName" th:value="${player.jobName}">
+					<input type="hidden" name="level" th:value="${player.level}">
+					<input type="hidden" name="name" th:value="${player.name}">
+					<input type="hidden" name="num" th:value="${num}">
+					<input type="submit" value="追加">
+					</form>
+				</div>
+				<div th:if="${player.memberId} != 99">
+					<span th:text="済み"></span>
+				</div>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		<br />
+		<br />
+		<div th:if="${num} != 4">
+		<p>選択済みメンバー</p>
+		<ul>
+		<li th:each="player : ${partyListMap}">
+			<span th:text="${player.value.memberId} + '人目 ' + ${player.value.name} + ' ' + ${player.value.jobName}"></span>
+		</ul>
+		<br />
+		<br />
+		<form action="#" th:action="@{/Encounter}" method="GET">
+			<input type="submit" value="選択終了">
+		</form>
+		</div>
+	</div>
+</body>
+</html>

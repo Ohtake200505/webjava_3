@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>SelectCommand</title>
+</head>
+<body>
+	<table border="1">
+		<thead>
+			<tr>
+			<th>名前</th>
+			<th>ＨＰ</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td th:text="${monster.name}"></td>
+			<td th:text="${monster.hp}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<img th:src="${monster.imgPath}"></img>
+	<br />
+	<br />
+	<table border="1">
+		<thead>
+			<tr>
+			<th>名前</th>
+			<th>職業</th>
+			<th>ﾚﾍﾞﾙ</th>
+			<th>ＨＰ</th>
+			<th>コマンド</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="player : ${partyListMap}">
+			<td th:text="${player.value.name}"></td>
+			<td th:text="${player.value.jobName}"></td>
+			<td th:text="${player.value.level}"></td>
+			<td th:text="${player.value.hp}"></td>
+			<td th:text="${player.value.command}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<h1>行動選択</h1>
+	<span th:text="${key} + '人目'"></span>
+	<th:block th:each="player : ${partyListMap}">
+		<div th:if="${player.value.memberId} == ${key}">
+			<span th:text="'職業 ：' + ${player.value.jobName}"></span>
+			<br />
+			<span th:text="'名前 ：' + ${player.value.name}"></span>
+			<br />
+			<span th:if="${player.value.hp} != 0">
+			<form action="#" th:action="@{/SelectCommand}" th:object="${BattleForm}" method="POST">
+				<input type="hidden" name="memberId" th:value="${player.value.memberId}">
+				<input type="hidden" name="command" th:value="たたかう">
+				<input type="submit" value="たたかう">
+			</form>
+			</span>
+			<form action="#" th:action="@{/SelectCommand}" th:object="${BattleForm}" method="POST">
+				<input type="hidden" name="memberId" th:value="${player.value.memberId}">
+				<input type="hidden" name="command" th:value="かいふく">
+				<input type="submit" value="かいふく">
+			</form>
+		</div>
+	</th:block>
+</body>
+</html>
